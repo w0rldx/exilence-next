@@ -1,50 +1,241 @@
 {
   "env": {
-    "browser": true,
-    "es6": true
+    "es2021": true,
+    "node": true,
+    "browser": false
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:prettier/recommended"
-  ],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
+  "settings": {
+    "import/core-modules": ["electron"]
   },
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
+  "overrides": [
+    {
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "airbnb-base",
+        "airbnb-typescript",
+        "plugin:prettier/recommended"
+      ],
+      "files": ["packages/main/**/*.{js,ts}"],
+      "parserOptions": {
+        "project": ["packages/main/tsconfig.json"],
+        "ecmaVersion": 12,
+        "sourceType": "module"
+      },
+      "plugins": ["@typescript-eslint", "unused-imports", "simple-import-sort"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/consistent-type-imports": "error",
+        /**
+         * Having a semicolon helps the optimizer interpret your code correctly.
+         * This avoids rare errors in optimized code.
+         * @see https://twitter.com/alex_kozack/status/1364210394328408066
+         */
+        "semi": ["error", "always"],
+        /**
+         * This will make the history of changes in the hit a little cleaner
+         */
+        "comma-dangle": ["warn", "always-multiline"],
+        /**
+         * Just for beauty
+         */
+        "quotes": [
+          "warn",
+          "single",
+          {
+            "avoidEscape": true
+          }
+        ],
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+        "import/extensions": "off",
+        "prettier/prettier": [
+          "error",
+          {
+            "printWidth": 120,
+            "tabWidth": 2,
+            "tabs": false,
+            "semi": true,
+            "singleQuote": true,
+            "overrides": [
+              {
+                "files": ["**/*.css", "**/*.scss", "**/*.html"],
+                "options": {
+                  "singleQuote": false
+                }
+              }
+            ],
+            "trailingComma": "all",
+            "bracketSpacing": true,
+            "arrowParens": "always",
+            "proseWrap": "never",
+            "htmlWhitespaceSensitivity": "strict",
+            "endOfLine": "lf",
+            "singleAttributePerLine": true
+          }
+        ]
+      }
     },
-    "ecmaVersion": 2018,
-    "sourceType": "module"
-  },
-  "plugins": ["react", "@typescript-eslint"],
-  "rules": {
-    "no-debugger": 0,
-    "no-unused-vars": 0,
-    "prefer-const": 1,
-    "@typescript-eslint/no-unused-vars": [
-      1,
-      { "args": "all", "ignoreRestSiblings": true, "argsIgnorePattern": "^_" }
-    ],
-    "prettier/prettier": 1,
-    "react/display-name": 1,
-    "react/no-children-prop": 2,
-    "react/no-danger-with-children": 2,
-    "react/no-deprecated": 1,
-    "react/no-direct-mutation-state": 2,
-    "react/no-find-dom-node": 1,
-    "react/no-is-mounted": 2,
-    "react/no-render-return-value": 2,
-    "react/no-string-refs": 2,
-    "react/no-unescaped-entities": 2,
-    "react/no-unknown-property": 2,
-    "react/no-unsafe": 0,
-    "react/react-in-jsx-scope": 2,
-    "react/require-render-return": 2,
-    "import/order": 0
-  }
+    {
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "airbnb-base",
+        "airbnb-typescript",
+        "plugin:prettier/recommended"
+      ],
+      "files": ["packages/preload/**/*.{js,ts}"],
+      "parserOptions": {
+        "project": ["packages/preload/tsconfig.json"],
+        "ecmaVersion": 12,
+        "sourceType": "module"
+      },
+      "plugins": ["@typescript-eslint", "unused-imports", "simple-import-sort"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/consistent-type-imports": "error",
+        /**
+         * Having a semicolon helps the optimizer interpret your code correctly.
+         * This avoids rare errors in optimized code.
+         * @see https://twitter.com/alex_kozack/status/1364210394328408066
+         */
+        "semi": ["error", "always"],
+        /**
+         * This will make the history of changes in the hit a little cleaner
+         */
+        "comma-dangle": ["warn", "always-multiline"],
+        /**
+         * Just for beauty
+         */
+        "quotes": [
+          "warn",
+          "single",
+          {
+            "avoidEscape": true
+          }
+        ],
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+        "import/extensions": "off",
+        "prettier/prettier": [
+          "error",
+          {
+            "printWidth": 120,
+            "tabWidth": 2,
+            "tabs": false,
+            "semi": true,
+            "singleQuote": true,
+            "overrides": [
+              {
+                "files": ["**/*.css", "**/*.scss", "**/*.html"],
+                "options": {
+                  "singleQuote": false
+                }
+              }
+            ],
+            "trailingComma": "all",
+            "bracketSpacing": true,
+            "arrowParens": "always",
+            "proseWrap": "never",
+            "htmlWhitespaceSensitivity": "strict",
+            "endOfLine": "lf",
+            "singleAttributePerLine": true
+          }
+        ]
+      }
+    },
+    {
+      "env": {
+        "browser": true,
+        "node": false
+      },
+      "extends": [
+        "plugin:tailwindcss/recommended",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended",
+        "airbnb",
+        "airbnb-typescript",
+        "plugin:prettier/recommended"
+      ],
+      "files": ["packages/renderer/**/*.{js,ts,tsx,jsx}"],
+      "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "project": ["packages/renderer/tsconfig.json"],
+        "ecmaFeatures": {
+          "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+      },
+      "plugins": ["react", "react-hooks", "@typescript-eslint", "unused-imports", "tailwindcss", "simple-import-sort"],
+      "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/prop-types": "off",
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "tailwindcss/classnames-order": "warn",
+        "tailwindcss/no-custom-classname": "warn",
+        "tailwindcss/no-contradicting-classname": "error",
+        "prettier/prettier": [
+          "error",
+          {
+            "printWidth": 120,
+            "tabWidth": 2,
+            "tabs": false,
+            "semi": true,
+            "singleQuote": true,
+            "overrides": [
+              {
+                "files": ["**/*.css", "**/*.scss", "**/*.html"],
+                "options": {
+                  "singleQuote": false
+                }
+              }
+            ],
+            "trailingComma": "all",
+            "bracketSpacing": true,
+            "arrowParens": "always",
+            "proseWrap": "never",
+            "htmlWhitespaceSensitivity": "strict",
+            "endOfLine": "lf",
+            "singleAttributePerLine": true
+          }
+        ],
+        "import/extensions": "off", // Avoid missing file extension errors, TypeScript already provides a similar feature
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+        "react/function-component-definition": "off", // Disable Airbnb's specific function type
+        "react/destructuring-assignment": "off", // Vscode doesn't support automatically destructuring, it's a pain to add a new variable
+        "react/require-default-props": "off", // Allow non-defined react props as undefined
+        "react/jsx-props-no-spreading": "off", // _app.tsx uses spread operator and also, react-hook-form
+        "@typescript-eslint/comma-dangle": "off", // Avoid conflict rule between Eslint and Prettier
+        "@typescript-eslint/consistent-type-imports": "error", // Ensure `import type` is used when it's necessary
+        "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"], // Overrides Airbnb configuration and enable no-restricted-syntax
+        "import/prefer-default-export": "off", // Named export is easier to refactor automatically
+        "simple-import-sort/imports": "error", // Import configuration for `eslint-plugin-simple-import-sort`
+        "simple-import-sort/exports": "error", // Export configuration for `eslint-plugin-simple-import-sort`
+        "@typescript-eslint/no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+      }
+    }
+  ]
 }

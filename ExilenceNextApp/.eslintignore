@@ -1,3 +1,6 @@
-public/*
-build/*
-dist/*
+node_modules
+scripts
+version
+**/dist/**
+**/*.test.ts
+**/*.spec.ts
