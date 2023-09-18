@@ -1,18 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shared.Entities;
-using Shared.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shared.Repositories
+﻿namespace Shared.Repositories
 {
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
+    using Shared.Entities;
+    using Shared.Interfaces;
+
     public class GroupRepository : IGroupRepository
     {
         private readonly ExilenceContext _exilenceContext;
+
         public GroupRepository(ExilenceContext context)
         {
             _exilenceContext = context;
@@ -40,9 +39,9 @@ namespace Shared.Repositories
         public async Task<Connection> GetConnection(string connectionId)
         {
             var connection = await _exilenceContext.Connections
-                .Include(connection => connection.Account)
-                .ThenInclude(account => account.Profiles)
-                .FirstOrDefaultAsync(c => c.ConnectionId == connectionId);
+                                                   .Include(connection => connection.Account)
+                                                   .ThenInclude(account => account.Profiles)
+                                                   .FirstOrDefaultAsync(c => c.ConnectionId == connectionId);
             return connection;
         }
 

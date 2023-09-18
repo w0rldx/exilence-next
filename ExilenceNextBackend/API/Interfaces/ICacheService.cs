@@ -1,12 +1,8 @@
-﻿using Shared.Entities;
-using Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace API.Interfaces
+﻿namespace API.Interfaces
 {
+    using System;
+    using System.Threading.Tasks;
+
     public interface ICacheService
     {
         Task<string> Get(string key);

@@ -1,11 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shared.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Shared
+﻿namespace Shared
 {
+    using System;
+    using Microsoft.EntityFrameworkCore;
+    using Shared.Entities;
+
     public class ExilenceContext : DbContext
     {
         public ExilenceContext(DbContextOptions<ExilenceContext> options) : base(options)
@@ -22,32 +20,27 @@ namespace Shared
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Ignore<Snapshot>();
             modelBuilder.Ignore<StashTab>();
             modelBuilder.Ignore<PricedItem>();
 
             modelBuilder.Entity<SnapshotProfile>()
-            .Property(e => e.ActiveStashTabIds)
-            .HasConversion(
-                v => string.Join(',', v),
-                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
+                        .Property(e => e.ActiveStashTabIds)
+                        .HasConversion(v => string.Join(',', v),
+                            v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
             modelBuilder.Entity<Account>()
-                .HasIndex(x => x.ClientId);
+                        .HasIndex(x => x.ClientId);
             modelBuilder.Entity<Character>()
-                .HasIndex(x => x.ClientId);
+                        .HasIndex(x => x.ClientId);
             modelBuilder.Entity<Connection>()
-                .HasIndex(x => x.ConnectionId);
+                        .HasIndex(x => x.ConnectionId);
             modelBuilder.Entity<Group>()
-                .HasIndex(x => x.ClientId);
+                        .HasIndex(x => x.ClientId);
             modelBuilder.Entity<League>()
-                .HasIndex(x => x.ClientId);
+                        .HasIndex(x => x.ClientId);
             modelBuilder.Entity<SnapshotProfile>()
-                .HasIndex(x => x.ClientId);
-
-
-
+                        .HasIndex(x => x.ClientId);
         }
     }
 }

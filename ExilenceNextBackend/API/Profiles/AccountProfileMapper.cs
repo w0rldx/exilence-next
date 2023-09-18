@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-using Shared.Entities;
-using Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace API.Profiles
+﻿namespace API.Profiles
 {
+    using AutoMapper;
+    using Shared.Entities;
+    using Shared.Models;
+
     public class AccountProfileMapper : Profile
     {
         public AccountProfileMapper()

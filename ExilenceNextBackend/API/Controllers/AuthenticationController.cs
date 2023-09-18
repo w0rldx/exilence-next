@@ -1,30 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-using API.Models;
-using API.Helpers;
-using API.Hubs;
-using API.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Shared.Models;
-
-namespace API.Controllers
+﻿namespace API.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net.Http;
+    using System.Text.Json;
+    using System.Threading.Tasks;
+    using API.Helpers;
+    using API.Interfaces;
+    using API.Models;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using Shared.Models;
+
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly ILogger<AuthenticationController> _logger;
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IAccountService _accountService;
-        private readonly string _secret;
         private readonly string _clientId;
         private readonly string _clientSecret;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<AuthenticationController> _logger;
+        private readonly string _secret;
 
         public AuthenticationController(IAccountService accountRepository, IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<AuthenticationController> logger)
         {
@@ -38,7 +36,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("token")]
-        public async Task<IActionResult> Token([FromBody]AccountModel accountModel)
+        public async Task<IActionResult> Token([FromBody] AccountModel accountModel)
         {
             var accountValid = await ValidateAccount(accountModel.Name, accountModel.AccessToken);
             if (!accountValid)
@@ -60,7 +58,6 @@ namespace API.Controllers
             else
             {
                 await _accountService.EditAccount(accountModel);
-
             }
 
             var token = AuthHelper.GenerateToken(_secret, account);
@@ -74,7 +71,7 @@ namespace API.Controllers
         [Route("oauth2")]
         public async Task<IActionResult> OAuth2(string code)
         {
-            string uri = "https://www.pathofexile.com/oauth/token";
+            var uri = "https://www.pathofexile.com/oauth/token";
 
             using (var client = _httpClientFactory.CreateClient())
             {
@@ -82,10 +79,8 @@ namespace API.Controllers
 
                 var data = new FormUrlEncodedContent(new[]
                 {
-                new KeyValuePair<string, string>("client_id", _clientId),
-                new KeyValuePair<string, string>("client_secret", _clientSecret),
-                new KeyValuePair<string, string>("code", code),
-                new KeyValuePair<string, string>("grant_type", "authorization_code")
+                    new KeyValuePair<string, string>("client_id", _clientId), new KeyValuePair<string, string>("client_secret", _clientSecret), new KeyValuePair<string, string>("code", code),
+                    new KeyValuePair<string, string>("grant_type", "authorization_code")
                 });
                 var response = await client.PostAsync(uri, data);
                 var content = await response.Content.ReadAsStringAsync();
@@ -102,11 +97,10 @@ namespace API.Controllers
 
         public async Task<bool> ValidateAccount(string accountName, string accessToken)
         {
-            string uri = "https://www.pathofexile.com/api/profile";
+            var uri = "https://www.pathofexile.com/api/profile";
 
             try
             {
-
                 using (var client = _httpClientFactory.CreateClient())
                 {
                     client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
@@ -116,7 +110,10 @@ namespace API.Controllers
                     var response = await client.GetAsync(uri);
                     var content = await response.Content.ReadAsStringAsync();
 
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
                     var model = JsonSerializer.Deserialize<ProfileEndpointModel>(content, options);
 
                     if (response.IsSuccessStatusCode)
@@ -125,10 +122,8 @@ namespace API.Controllers
                         {
                             return true;
                         }
-                        else
-                        {
-                            _logger.LogError($"Mismatch between said accountName: {accountName} and accountName fetched from GGG: {model.Name}.");
-                        }
+
+                        _logger.LogError($"Mismatch between said accountName: {accountName} and accountName fetched from GGG: {model.Name}.");
                     }
                     else
                     {
@@ -143,7 +138,6 @@ namespace API.Controllers
             }
 
             return false;
-
         }
 
         [HttpGet]

@@ -1,11 +1,8 @@
-﻿using Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace API.Interfaces
+﻿namespace API.Interfaces
 {
+    using System.Threading.Tasks;
+    using Shared.Models;
+
     public interface IGroupService
     {
         Task<GroupModel> GetGroup(string groupName);

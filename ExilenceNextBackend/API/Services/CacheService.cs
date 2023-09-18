@@ -1,21 +1,16 @@
-﻿using API.Interfaces;
-using AutoMapper;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-using Shared.Entities;
-using Shared.Interfaces;
-using Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace API.Services
+﻿namespace API.Services
 {
+    using System;
+    using System.Threading.Tasks;
+    using API.Interfaces;
+    using AutoMapper;
+    using Shared.Entities;
+    using Shared.Interfaces;
+
     public class CacheService : ICacheService
     {
-        ICacheRepository _cacheRepository;
-        readonly IMapper _mapper;
+        private readonly ICacheRepository _cacheRepository;
+        private readonly IMapper _mapper;
 
 
         public CacheService(ICacheRepository cacheRepository, IMapper mapper)
@@ -26,10 +21,12 @@ namespace API.Services
 
         public async Task<string> Get(string key)
         {
-            CacheItem cache = await _cacheRepository.Get(key);
+            var cache = await _cacheRepository.Get(key);
 
             if (cache != null)
+            {
                 return cache.Value;
+            }
 
             return null;
         }
@@ -37,7 +34,7 @@ namespace API.Services
 
         public async Task Add(string key, string value, DateTime expireAt)
         {
-            CacheItem cacheValue = new CacheItem()
+            var cacheValue = new CacheItem
             {
                 Key = key,
                 Value = value,
@@ -46,6 +43,5 @@ namespace API.Services
 
             await _cacheRepository.Add(cacheValue);
         }
-
     }
 }

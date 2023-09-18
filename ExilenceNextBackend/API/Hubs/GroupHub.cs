@@ -1,20 +1,10 @@
-﻿using AutoMapper;
-using MessagePack;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using Shared.Entities;
-using Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-
-namespace API.Hubs
+﻿namespace API.Hubs
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.SignalR;
+    using Shared.Models;
+
     public partial class BaseHub : Hub
     {
         public async Task<string> GroupExists(string groupName)

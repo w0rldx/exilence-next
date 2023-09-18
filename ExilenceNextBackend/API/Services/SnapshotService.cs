@@ -1,20 +1,18 @@
-﻿using API.Interfaces;
-using AutoMapper;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-using Shared.Entities;
-using Shared.Interfaces;
-using Shared.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace API.Services
+﻿namespace API.Services
 {
+    using System.Threading.Tasks;
+    using API.Interfaces;
+    using AutoMapper;
+    using MongoDB.Driver;
+    using MongoDB.Driver.Linq;
+    using Shared.Entities;
+    using Shared.Interfaces;
+    using Shared.Models;
+
     public class SnapshotService : ISnapshotService
     {
-        ISnapshotRepository _snapshotRepository;
-        readonly IMapper _mapper;
+        private readonly IMapper _mapper;
+        private readonly ISnapshotRepository _snapshotRepository;
 
         public SnapshotService(ISnapshotRepository snapshotRepository, IMapper mapper)
         {

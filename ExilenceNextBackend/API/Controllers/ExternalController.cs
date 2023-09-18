@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace API.Controllers
+﻿namespace API.Controllers
 {
-    public class ExternalController : ControllerBase 
+    using Microsoft.AspNetCore.Mvc;
+
+    public class ExternalController : ControllerBase
     {
         //Used by HAProxy to detect downtime. 
         [Route("")]

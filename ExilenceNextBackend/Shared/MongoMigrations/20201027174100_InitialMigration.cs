@@ -1,11 +1,11 @@
-﻿using MongoDB.Driver;
-using MongoDBMigrations;
-
-namespace Shared.MongoMigrations
+﻿namespace Shared.MongoMigrations
 {
+    using MongoDB.Driver;
+    using MongoDBMigrations;
+
     public class InitialMigration : IMigration
     {
-        public MongoDBMigrations.Version Version => new MongoDBMigrations.Version(1, 0, 0);
+        public Version Version => new Version(1, 0, 0);
         public string Name => "Initial Migration";
 
 

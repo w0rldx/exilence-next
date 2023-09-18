@@ -1,18 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shared.Entities;
-using Shared.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shared.Repositories
+﻿namespace Shared.Repositories
 {
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Threading.Tasks;
+    using Shared.Entities;
+    using Shared.Interfaces;
+
     public class AccountRepository : IAccountRepository
     {
         private readonly ExilenceContext _exilenceContext;
+
         public AccountRepository(ExilenceContext context)
         {
             _exilenceContext = context;
@@ -24,6 +22,7 @@ namespace Shared.Repositories
             _exilenceContext.Accounts.Add(account);
             return account;
         }
+
         public Account RemoveAccount(Account account)
         {
             _exilenceContext.Accounts.Remove(account);
@@ -55,7 +54,5 @@ namespace Shared.Repositories
         {
             await _exilenceContext.SaveChangesAsync();
         }
-
-
     }
 }

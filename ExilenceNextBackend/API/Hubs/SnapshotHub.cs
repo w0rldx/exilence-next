@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Polly;
-using Polly.Contrib.WaitAndRetry;
-using Shared.Models;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace API.Hubs
+﻿namespace API.Hubs
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.SignalR;
+    using Shared.Models;
+
     public partial class BaseHub : Hub
     {
-
         public async Task<SnapshotModel> GetSnapshot(string snapshotId)
         {
             var snapshotModel = await _snapshotService.GetSnapshot(snapshotId);
@@ -38,9 +35,10 @@ namespace API.Hubs
                 await Clients.OthersInGroup(group.Name).SendAsync("OnAddSnapshot", ConnectionId, profileId, snapshotModel);
             }
 
-            LogDebug($"Added snapshot containing {snapshotModel.StashTabs.Sum(s => s.PricedItems.Count())} items worth {Math.Round(snapshotModel.StashTabs.Sum(s => s.Value), 0)} chaos in " + _timer.ElapsedMilliseconds + " ms.");
-                       
-            
+            LogDebug($"Added snapshot containing {snapshotModel.StashTabs.Sum(s => s.PricedItems.Count())} items worth {Math.Round(snapshotModel.StashTabs.Sum(s => s.Value), 0)} chaos in " +
+                     _timer.ElapsedMilliseconds + " ms.");
+
+
             return snapshotModel;
         }
 
@@ -67,10 +65,12 @@ namespace API.Hubs
             {
                 await Clients.OthersInGroup(group.Name).SendAsync("OnRemoveAllSnapshots", ConnectionId, profileClientId);
             }
+
             LogDebug($"Removed all snapshots for ProfileId: {profileClientId} in " + _timer.ElapsedMilliseconds + " ms.");
         }
-        
+
         #region Streams
+
         //public async Task AddPricedItem(IAsyncEnumerable<PricedItemModel> pricedItems, string stashtabId)
         //{
         //    await foreach (var pricedItem in pricedItems)
@@ -96,7 +96,7 @@ namespace API.Hubs
         //        await Task.Delay(100, cancellationToken);
         //    }
         //}
-        #endregion
 
+        #endregion
     }
 }

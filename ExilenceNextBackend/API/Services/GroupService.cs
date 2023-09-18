@@ -1,22 +1,22 @@
-﻿using API.Interfaces;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Shared.Entities;
-using Shared.Helpers;
-using Shared.Interfaces;
-using Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace API.Services
+﻿namespace API.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using API.Interfaces;
+    using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
+    using Shared.Entities;
+    using Shared.Helpers;
+    using Shared.Interfaces;
+    using Shared.Models;
+
     public class GroupService : IGroupService
     {
-        private readonly IMapper _mapper;
-        private readonly IGroupRepository _groupRepository;
         private readonly IAccountRepository _accountRepository;
+        private readonly IGroupRepository _groupRepository;
+        private readonly IMapper _mapper;
 
         public GroupService(IGroupRepository groupRepository, IAccountRepository accountRepository, IMapper mapper)
         {
@@ -44,6 +44,7 @@ namespace API.Services
             var connection = await _groupRepository.GetConnection(connectionId);
             return _mapper.Map<ConnectionModel>(connection);
         }
+
         public async Task<ConnectionModel> RemoveConnection(string connectionId)
         {
             var connection = await _groupRepository.RemoveConnection(connectionId);
@@ -58,6 +59,7 @@ namespace API.Services
             {
                 return true;
             }
+
             return false;
         }
 
@@ -70,9 +72,9 @@ namespace API.Services
         public async Task<GroupModel> GetGroupForConnection(string connectionId)
         {
             var group = await _groupRepository.GetGroups(group => group.Connections.Any(connection => connection.ConnectionId == connectionId))
-                .Include(grp => grp.Connections)
-                .ThenInclude(connection => connection.Account)
-                .FirstOrDefaultAsync();
+                                              .Include(grp => grp.Connections)
+                                              .ThenInclude(connection => connection.Account)
+                                              .FirstOrDefaultAsync();
 
             return _mapper.Map<GroupModel>(group);
         }
@@ -81,20 +83,23 @@ namespace API.Services
         {
             var connection = await _groupRepository.GetConnection(connectionId);
             var group = await _groupRepository.GetGroups(group => group.Name == groupModel.Name)
-                .Include(group => group.Connections)
-                .ThenInclude(connection => connection.Account)
-                .ThenInclude(account => account.Profiles)
-                .FirstOrDefaultAsync();
+                                              .Include(group => group.Connections)
+                                              .ThenInclude(connection => connection.Account)
+                                              .ThenInclude(account => account.Profiles)
+                                              .FirstOrDefaultAsync();
 
             if (group == null)
             {
                 var salt = Password.Salt();
 
-                group = new Group()
+                group = new Group
                 {
                     Name = groupModel.Name,
                     ClientId = Guid.NewGuid().ToString(),
-                    Connections = new List<Connection>() { connection },
+                    Connections = new List<Connection>
+                    {
+                        connection
+                    },
                     Created = DateTime.UtcNow,
                     Salt = salt,
                     Hash = Password.Hash(salt, groupModel.Password)
@@ -103,7 +108,7 @@ namespace API.Services
             }
             else
             {
-                bool verified = Password.Verify(groupModel.Password, group.Salt, group.Hash);
+                var verified = Password.Verify(groupModel.Password, group.Salt, group.Hash);
                 if (verified)
                 {
                     group.Connections.Add(connection);
@@ -114,16 +119,16 @@ namespace API.Services
                 }
             }
 
-            await _groupRepository.SaveChangesAsync();            
+            await _groupRepository.SaveChangesAsync();
             return _mapper.Map<GroupModel>(group);
         }
 
         public async Task<GroupModel> LeaveGroup(string connectionId, string groupName)
         {
             var group = await _groupRepository.GetGroups(group => group.Name == groupName)
-                .Include(group => group.Connections)
-                .ThenInclude(connection => connection.Account)
-                .FirstAsync();
+                                              .Include(group => group.Connections)
+                                              .ThenInclude(connection => connection.Account)
+                                              .FirstAsync();
             var connection = group.Connections.First(connection => connection.ConnectionId == connectionId);
             group.Connections.Remove(connection);
 

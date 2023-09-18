@@ -1,17 +1,11 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using Shared.Entities;
-using Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Profiles;
-using Microsoft.AspNetCore.Mvc;
-using MessagePack;
-
-namespace API.Hubs
+﻿namespace API.Hubs
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
+    using Shared.Models;
+
     public partial class BaseHub : Hub
     {
         public async Task<List<SnapshotProfileModel>> GetAllProfiles(string accountId)
@@ -26,7 +20,7 @@ namespace API.Hubs
             return profileModel;
         }
 
-        public async Task<SnapshotProfileModel> AddProfile([FromBody]SnapshotProfileModel profileModel)
+        public async Task<SnapshotProfileModel> AddProfile([FromBody] SnapshotProfileModel profileModel)
         {
             profileModel = await _accountService.AddProfile(AccountName, profileModel);
 
@@ -40,7 +34,7 @@ namespace API.Hubs
             return profileModel;
         }
 
-        public async Task<SnapshotProfileModel> EditProfile([FromBody]SnapshotProfileModel profileModel)
+        public async Task<SnapshotProfileModel> EditProfile([FromBody] SnapshotProfileModel profileModel)
         {
             profileModel = await _accountService.EditProfile(AccountName, profileModel);
             LogDebug($"Updated profile with name: {profileModel.Name} in " + _timer.ElapsedMilliseconds + " ms.");
@@ -64,14 +58,13 @@ namespace API.Hubs
         public async Task RemoveAllProfiles(string accountId)
         {
             await _accountService.RemoveAllProfiles(accountId);
-            
         }
 
         public async Task<string> ChangeProfile(string profileId)
         {
             var profileModel = await _accountService.ChangeProfile(AccountName, profileId);
 
-             
+
             var group = await _groupService.GetGroupForConnection(ConnectionId);
             if (group != null)
             {
@@ -81,6 +74,5 @@ namespace API.Hubs
             LogDebug($"Set profile with name: {profileModel.Name} to active in " + _timer.ElapsedMilliseconds + " ms.");
             return profileModel.ClientId;
         }
-
     }
 }
